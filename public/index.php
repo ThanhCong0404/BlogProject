@@ -1,7 +1,6 @@
 <?php
 
-define("ROOT", "http://localhost/BlogProject/public");
-
+require "../app/core/init.php";
 
 // ROUTING PAGE
 $url = $_GET['url'] ?? 'home'; //default home if dont exist param url 

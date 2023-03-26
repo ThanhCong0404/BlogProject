@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <title>LOGIN - BLOG</title>
+    <title>LOGIN - <?= APP_NAME ?> </title>
 
  
 
@@ -74,7 +74,7 @@
     <a href="home">
       <img class="mb-4 rounded-circle shadow" src="assets/images/logo.jpg" alt="" width="222" height="197" style="object-fit:cover;">
     </a>
-    
+
     <h1 class="h3 mb-3 fw-normal">Create Account</h1>
 
     <div class="form-floating">

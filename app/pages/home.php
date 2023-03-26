@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
 
-    <title>HOME · BLOG</title>
+    <title>HOME · <?=APP_NAME?> </title>
 
     
 
