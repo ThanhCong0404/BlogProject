@@ -1,3 +1,50 @@
+<?php  
+
+ if(!empty($_POST)){
+  //validate
+  $errors = [];
+
+  if(empty($_POST['username'])){
+    $errors['username'] = "Username is required";
+  }else if(preg_match("/^[a-zA-Z]+$/", $_POST['username'])){
+    $errors['username'] = "Username only have letters and no spaces";
+  }
+
+  $query = "select id from users where email = :email limit 1";
+  $email =  query($query,['email'=> $_POST['email']]);
+
+  if(empty($_POST['email'])){
+    $errors['email'] = "Email is required";
+  }else if($email){
+    $errors['email'] = "That email is already in use.";
+  }
+
+  if(empty($_POST['password'])){
+    $errors['password'] = "Password is required";
+  }else if(strlen($_POST['password']) < 8 ){
+    $errors['password'] = "Password must be 8 character or more.";
+  }
+
+
+
+  if(empty(errors)){
+    //save to database
+    $data = [];
+    $data["username"] = $_POST['username'];
+    $data["email"] = $_POST['email'];
+    $data["role"] = "user";
+    $data["password"] = password_hash($_POST['username'] , PASSWORD_DEFAULT);
+
+    $query = "insert into users(username,email,password,role) values(:username,:email,:password,:role)";
+    query($query,$data);
+
+    redirect("login");
+  }
+ }
+
+?>
+
+
 <!doctype html>
 <html lang="en">
   <head>

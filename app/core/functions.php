@@ -18,6 +18,25 @@ function query(string $query,array $data = []){
 	return false;
 }
 
+function redirect($page){
+	header('location: '.$page);
+	die;
+}
+
+function old_value($key){
+	if(!empty($_POST[$key])) return $_POST[$key];
+
+	return "";
+
+}
+
+function old_checked($key){
+	if(!empty($_POST[$key])) return " checked ";
+
+	return "";
+
+}
+
 
 //create_tables();
 function create_tables(){
