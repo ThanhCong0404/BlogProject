@@ -10,8 +10,8 @@
 
     
 
-    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/css/bootstrap-icons.css" rel="stylesheet">
+    <link href="<?=ROOT?>/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?=ROOT?>/assets/css/bootstrap-icons.css" rel="stylesheet">
 
     <style>
       .bd-placeholder-img {
@@ -68,7 +68,7 @@
 
     
     <!-- Custom styles for this template -->
-    <link href="assets/css/dashboard.css" rel="stylesheet">
+    <link href="<?=ROOT?>/assets/css/dashboard.css" rel="stylesheet">
   </head>
   <body>
     
@@ -94,6 +94,27 @@
             <a class="nav-link active" aria-current="page" href="<?=ROOT?>/admin">
               <i class="bi bi-speedometer"></i>
               Dashboard
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="<?=ROOT?>/admin/users">
+              <i class="bi bi-person"></i>
+              Users
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="<?=ROOT?>/admin/categories">
+              <i class="bi bi-tags"></i>
+              Categories
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="<?=ROOT?>/admin/posts">
+              <i class="bi bi-file-post"></i>
+              Posts
             </a>
           </li>
           
@@ -134,16 +155,25 @@
           </button>
         </div>
       </div>
+      <!-- content area -->
+      <?php 
+        $section = $url[1] ?? 'dashboard';
 
+        $filename = "../app/pages/admin/".$section.".php";
+        if(file_exists($filename)){
+          require_once $filename;
+        }else{
+          require_once "../app/pages/admin/404.php";
+        }
 
-      content area
+      ?>
     </main>
   </div>
 </div>
 
 
-    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<?=ROOT?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script src="assets/js/dashboard.js"></script>
+    <script src="<?=ROOT?>/assets/js/dashboard.js"></script>
   </body>
 </html>

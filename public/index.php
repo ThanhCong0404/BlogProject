@@ -6,6 +6,7 @@ require "../app/core/init.php";
 
 // ROUTING PAGE
 $url = $_GET['url'] ?? 'home'; //default home if dont exist param url 
+$url = strtolower($url);
 $url = explode("/", $url); //split
 
 $page_name = trim($url[0]);
