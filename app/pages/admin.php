@@ -121,28 +121,28 @@ if($section == 'posts')
                 <div class="position-sticky pt-3 sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="<?= ROOT ?>/admin">
+                        <a class="nav-link <?=$section =='dashboard' ? 'active':''?>" aria-current="page" href="<?=ROOT?>/admin">
                                 <i class="bi bi-speedometer"></i>
                                 Dashboard
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="<?= ROOT ?>/admin/users">
+                        <a class="nav-link <?=$section =='users' ? 'active':''?>" aria-current="page" href="<?=ROOT?>/admin/users">
                                 <i class="bi bi-person"></i>
                                 Users
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="<?= ROOT ?>/admin/categories">
+                        <a class="nav-link <?=$section =='categories' ? 'active':''?>" aria-current="page" href="<?=ROOT?>/admin/categories">
                                 <i class="bi bi-tags"></i>
                                 Categories
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="<?= ROOT ?>/admin/posts">
+                        <a class="nav-link <?=$section =='posts' ? 'active':''?>" aria-current="page" href="<?=ROOT?>/admin/posts">
                                 <i class="bi bi-file-post"></i>
                                 Posts
                             </a>
