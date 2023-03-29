@@ -19,6 +19,31 @@ function query(string $query,array $data = []){
 }
 
 
+function add_root_to_images($content)
+{
+
+	preg_match_all("/<img[^>]+/", $content, $matches);
+
+	if(is_array($matches[0]) && count($matches[0]) > 0)
+	{
+		foreach ($matches[0] as $img) {
+
+			preg_match('/src="[^"]+/', $img, $match);
+			$new_img = str_replace('src="', 'src="'.ROOT."/", $img);
+			$content = str_replace($img, $new_img, $content);
+
+		}
+	}
+	return $content;
+}
+
+function remove_root_from_content($content)
+{
+	
+	$content = str_replace(ROOT, "", $content);
+
+	return $content;
+}
 function query_row(string $query,array $data = []){
 	
 
@@ -95,7 +120,14 @@ function esc($str)
 function authenticate($row){
 	$_SESSION['USER'] = $row;
 }
-
+function user($key = '')
+{
+	if(empty($key))
+	return $_SESSION['USER'];
+	if(!empty($_SESSION['USER'][$key])) 
+	return $_SESSION['USER'][$key];
+	return '';
+}
 function logged_in(){
 	if(!empty($_SESSION['USER'])){
 		return true;
