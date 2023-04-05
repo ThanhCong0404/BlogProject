@@ -1,7 +1,7 @@
 <?php 
 
-function query(string $query,array $data = []){
-	
+function query(string $query, array $data = [])
+{
 
 	$string = "mysql:hostname=".DB_HOST.";dbname=".DB_NAME;
 	$con = new PDO($string,DB_USER,DB_PASS);
@@ -9,13 +9,44 @@ function query(string $query,array $data = []){
 	$stm = $con->prepare($query);
 	$stm->execute($data);
 
-	/* Phương thức `fetchAll` sử dụng đối số `PDO::FETCH_ASSOC` để chỉ định rằng mảng kết quả trả về sẽ sử dụng tên cột của bảng (hoặc tên trường của bảng) làm khóa của mảng. */
 	$result = $stm->fetchAll(PDO::FETCH_ASSOC);
-	if(is_array($result) && !empty($result)){
+	if(is_array($result) && !empty($result))
+	{
 		return $result;
 	}
 
 	return false;
+
+}
+
+function remove_images_from_content($content, $folder = 'uploads/')
+{
+
+	preg_match_all("/<img[^>]+/", $content, $matches);
+
+	if(is_array($matches[0]) && count($matches[0]) > 0)
+	{
+		foreach ($matches[0] as $img) {
+
+			if(!strstr($img, "data:"))
+			{
+				continue;
+			}
+
+			preg_match('/src="[^"]+/', $img, $match);
+			$parts = explode("base64,", $match[0]);
+
+			preg_match('/data-filename="[^"]+/', $img, $file_match);
+
+			$filename = $folder.str_replace('data-filename="', "", $file_match[0]);
+
+			file_put_contents($filename, base64_decode($parts[1]));
+			$content = str_replace($match[0], 'src="'.$filename, $content);
+			
+
+		}
+	}
+	return $content;
 }
 
 
@@ -44,8 +75,10 @@ function remove_root_from_content($content)
 
 	return $content;
 }
-function query_row(string $query,array $data = []){
-	
+
+
+function query_row(string $query, array $data = [])
+{
 
 	$string = "mysql:hostname=".DB_HOST.";dbname=".DB_NAME;
 	$con = new PDO($string,DB_USER,DB_PASS);
@@ -53,34 +86,39 @@ function query_row(string $query,array $data = []){
 	$stm = $con->prepare($query);
 	$stm->execute($data);
 
-	/* Phương thức `fetchAll` sử dụng đối số `PDO::FETCH_ASSOC` để chỉ định rằng mảng kết quả trả về sẽ sử dụng tên cột của bảng (hoặc tên trường của bảng) làm khóa của mảng. */
 	$result = $stm->fetchAll(PDO::FETCH_ASSOC);
-	if(is_array($result) && !empty($result)){
+	if(is_array($result) && !empty($result))
+	{
 		return $result[0];
 	}
 
 	return false;
+
 }
 
-function redirect($page){
-	header('location: '.ROOT.'/'.$page);
+function redirect($page)
+{
+
+	header('Location: '.ROOT. '/' . $page);
 	die;
 }
 
-function old_value($key,$default = ''){
-	if(!empty($_POST[$key])) 
-	return $_POST[$key];
+function old_value($key, $default = '')
+{
+	if(!empty($_POST[$key]))
+		return $_POST[$key];
 
 	return $default;
-
 }
 
-function old_checked($key,$default = ''){
-	if(!empty($_POST[$key])) return " checked ";
-
+function old_checked($key, $default = '')
+{
+	if(!empty($_POST[$key]))
+		return " checked ";
+	
 	return "";
-
 }
+
 function old_select($key, $value, $default = '')
 {
 	if(!empty($_POST[$key]) && $_POST[$key] == $value)
@@ -99,45 +137,55 @@ function get_image($file)
 	{
 		return ROOT.'/'.$file;
 	}
-	return ROOT.'/assets/images/3.jsp';
+
+	return ROOT.'/assets/images/no_image.jpg';
 }
 
-// chuyển đổi chuổi sang url phục vụ cho SEO web
-function str_to_url($url){
-	$url = str_replace("'", "", $url); // loại bỏ các ký tự `'`
-	$url = preg_replace("~[^\\pL0-9_]+~u", "-", $url); /* thay thế bất kỳ ký tự nào trong chuỗi đầu vào không phải là chữ cái tiếng Anh, số hoặc dấu gạch dưới bằng một dấu gạch ngang. */
-	$url = trim($url,"-"); //loại bỏ bất kỳ dấu gạch ngang nào ở đầu hoặc cuối chuỗi.
-	$url = iconv("utf-8", "us-ascii//TRANSLIT", $url); /*chuyển đổi các ký tự tiếng Việt(utf-8) có dấu thành dạng không dấu, và các ký tự có ký hiệu đặc biệt thành dạng ASCII*/
-	$url = strtolower($url); //
-	$url = preg_replace('~[^-a-z0-9_]+~', '', $url); //xóa bất kỳ ký tự nào trong chuỗi đầu vào không phải là chữ cái tiếng Anh, số, dấu gạch dưới hoặc dấu gạch ngang cuối cùng
+function str_to_url($url)
+{
 
-	return $url;
+   $url = str_replace("'", "", $url);
+   $url = preg_replace('~[^\\pL0-9_]+~u', '-', $url);
+   $url = trim($url, "-");
+   $url = iconv("utf-8", "us-ascii//TRANSLIT", $url);
+   $url = strtolower($url);
+   $url = preg_replace('~[^-a-z0-9_]+~', '', $url);
+   
+   return $url;
 }
+
 function esc($str)
 {
 	return htmlspecialchars($str ?? '');
 }
-function authenticate($row){
+
+function authenticate($row)
+{
 	$_SESSION['USER'] = $row;
 }
+
 function user($key = '')
 {
 	if(empty($key))
-	return $_SESSION['USER'];
-	if(!empty($_SESSION['USER'][$key])) 
-	return $_SESSION['USER'][$key];
+		return $_SESSION['USER'];
+
+	if(!empty($_SESSION['USER'][$key]))
+		return $_SESSION['USER'][$key];
+
 	return '';
 }
-function logged_in(){
-	if(!empty($_SESSION['USER'])){
+
+function logged_in()
+{
+	if(!empty($_SESSION['USER']))
 		return true;
-	}
 
 	return false;
 }
+
 function get_pagination_vars()
 {
-	
+
 	/** set pagination vars **/
 	$page_number = $_GET['page'] ?? 1;
 	$page_number = empty($page_number) ? 1 : (int)$page_number;
@@ -179,9 +227,8 @@ function get_pagination_vars()
 }
 
 //create_tables();
-function create_tables(){
-	
-
+function create_tables()
+{
 	$string = "mysql:hostname=".DB_HOST.";" ;
 	$con = new PDO($string,DB_USER,DB_PASS);
 
@@ -193,25 +240,27 @@ function create_tables(){
 	$stm = $con->prepare($query);
 	$stm->execute();
 
-	//users table
+	/** users table **/
 	$query = "create table if not exists users(
+
 		id int primary key auto_increment,
-		username nvarchar(50) not null,
+		username varchar(50) not null,
 		email varchar(100) not null,
 		password varchar(255) not null,
 		image varchar(1024) null,
 		date datetime default current_timestamp,
 		role varchar(10) not null,
 
-
 		key username (username),
 		key email (email)
-	)";	
+
+	)";
 	$stm = $con->prepare($query);
 	$stm->execute();
 
-	//categories table
+	/** categories table **/
 	$query = "create table if not exists categories(
+
 		id int primary key auto_increment,
 		category varchar(50) not null,
 		slug varchar(100) not null,
@@ -219,31 +268,36 @@ function create_tables(){
 
 		key slug (slug),
 		key category (category)
-	)";	
+
+	)";
 	$stm = $con->prepare($query);
 	$stm->execute();
 
-	// posts table
+	/** posts table **/
 	$query = "create table if not exists posts(
-		id int primary key auto_increment,		
-		user_id int ,
-		category_id int ,
+
+		id int primary key auto_increment,
+		user_id int,
+		category_id int,
 		title varchar(100) not null,
 		content text null,
 		image varchar(1024) null,
 		date datetime default current_timestamp,
 		slug varchar(100) not null,
 
-
 		key user_id (user_id),
 		key category_id (category_id),
 		key title (title),
 		key slug (slug),
 		key date (date)
-	)";	
+
+	)";
 	$stm = $con->prepare($query);
 	$stm->execute();
+
+
 }
+
 
 function resize_image($filename, $max_size = 1000)
 {
@@ -252,10 +306,10 @@ function resize_image($filename, $max_size = 1000)
 	{
 		$type = mime_content_type($filename);
 		switch ($type) {
-			case 'image/jpeg':
+			case 'image/JPEG':
 				$image = imagecreatefromjpeg($filename);
 				break;
-			case 'image/png':
+			case 'image/PNG':
 				$image = imagecreatefrompng($filename);
 				break;
 			case 'image/gif':

@@ -64,7 +64,7 @@ if($action == 'add')
 
           $destination = $folder . time() . $_FILES['image']['name'];
           move_uploaded_file($_FILES['image']['tmp_name'], $destination);
-      //    resize_image($destination);
+          resize_image($destination);
         }
 
       }
@@ -164,7 +164,7 @@ if($action == 'edit')
 
             $destination = $folder . time() . $_FILES['image']['name'];
             move_uploaded_file($_FILES['image']['tmp_name'], $destination);
-           // resize_image($destination);
+            resize_image($destination);
           }
 
 

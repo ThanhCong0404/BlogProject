@@ -1,6 +1,3 @@
-
-
-
 <?php 
 
 //add new
@@ -59,7 +56,7 @@ if($action == 'add')
 
       if(empty($errors))
       {
- //       $new_content = remove_images_from_content($_POST['content']);
+        $new_content = remove_images_from_content($_POST['content']);
         
         //save to database
         $data = [];
@@ -135,7 +132,7 @@ if($action == 'edit')
         if(empty($errors))
         {
 
-  //        $new_content = remove_images_from_content($_POST['content']);
+          $new_content = remove_images_from_content($_POST['content']);
           $new_content = remove_root_from_content($new_content);
 
           //save to database
