@@ -1,13 +1,16 @@
-/* globals Chart:false, feather:false */
+<script>
+/* eslint-disable no-unused-vars */
 
-(() => {
+(function() {
   'use strict'
 
+  // Enable feather icons
   feather.replace({ 'aria-hidden': 'true' })
 
-  // Graphs
+  // Get chart context
   const ctx = document.getElementById('myChart')
-  // eslint-disable-next-line no-unused-vars
+
+  // Create chart
   const myChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -41,7 +44,7 @@
       scales: {
         yAxes: [{
           ticks: {
-            beginAtZero: false
+            beginAtZero: true
           }
         }]
       },
@@ -51,3 +54,4 @@
     }
   })
 })()
+</script>
