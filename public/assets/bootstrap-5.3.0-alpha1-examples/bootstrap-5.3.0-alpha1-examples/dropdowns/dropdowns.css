@@ -1,21 +1,30 @@
+:root {
+  --bs-red: #c73d3a;
+  --bs-blue: #0070f3;
+  --bs-white: #fff;
+  --bs-light: #f8f9fa;
+}
+
 .dropdown-menu {
   margin: 4rem auto;
 }
 
 .dropdown-item-danger {
-  color: var(--bs-red);
+  --color: var(--bs-red);
+  color: var(--color);
 }
 .dropdown-item-danger:hover,
 .dropdown-item-danger:focus {
   color: #fff;
-  background-color: var(--bs-red);
+  background-color: var(--color);
 }
 .dropdown-item-danger.active {
-  background-color: var(--bs-red);
+  background-color: var(--color);
 }
 
 .btn-hover-light {
-  background-color: var(--bs-white);
+  --bg-color: var(--bs-white);
+  background-color: var(--bg-color);
 }
 .btn-hover-light:hover,
 .btn-hover-light:focus {
@@ -23,20 +32,18 @@
   background-color: var(--bs-light);
 }
 
-.cal-month,
-.cal-days,
-.cal-weekdays {
+.calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   align-items: center;
 }
-.cal-month-name {
+.calendar__month-name {
   grid-column-start: 2;
   grid-column-end: 7;
   text-align: center;
 }
-.cal-weekday,
-.cal-btn {
+.calendar__weekday,
+.calendar__btn {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -44,23 +51,24 @@
   height: 3rem;
   padding: 0;
 }
-.cal-btn:not([disabled]) {
+.calendar__btn:not([disabled]) {
   font-weight: 500;
 }
-.cal-btn:hover,
-.cal-btn:focus {
+.calendar__btn:hover,
+.calendar__btn:focus {
   background-color: rgba(0, 0, 0, .05);
 }
-.cal-btn[disabled] {
+.calendar__btn[disabled] {
   border: 0;
   opacity: .5;
 }
 
 .form-control-dark {
-  background-color: rgba(255, 255, 255, .05);
-  border-color: rgba(255, 255, 255, .15);
+  --bg-color: rgba(255, 255, 255, .05);
+  --border-color: rgba(255, 255, 255, .15);
+  background-color: var(--bg-color);
+  border-color: var(--border-color);
 }
-
 
 .w-220px {
   width: 220px;
