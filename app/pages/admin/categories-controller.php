@@ -1,116 +1,115 @@
-<?php 
+<?php
 
-//add new
-if($action == 'add')
+function isValidCategory($category): bool
 {
-    if(!empty($_POST))
-    {
-      //validate
-      $errors = [];
+    return !empty($category) && preg_match("/^[a-zA-Z0-9 \-\_\&]+$/", $category);
+}
 
-      if(empty($_POST['category']))
-      {
-        $errors['category'] = "A category is required";
-      }else
-      if(!preg_match("/^[a-zA-Z0-9 \-\_\&]+$/", $_POST['category']))
-      {
-        $errors['category'] = "Category can only have letters";
-      }
-
-      $slug = str_to_url($_POST['category']);
-
-      $query = "select id from categories where slug = :slug limit 1";
-      $slug_row = query($query, ['slug'=>$slug]);
-
-      if($slug_row)
-      {
-        $slug .= rand(1000,9999);
-      }
-
-      if(empty($errors))
-      {
-        //save to database
-        $data = [];
-        $data['category'] = $_POST['category'];
-        $data['slug']     = $slug;
-        $data['disabled'] = $_POST['disabled'];
-
-        $query = "insert into categories (category,slug,disabled) values (:category,:slug,:disabled)";
-        query($query, $data);
-
-        redirect('admin/categories');
-
-      }
-    }
-}else
-if($action == 'edit')
+function getSafeCategoryData($category, $disabled, $id = null): array
 {
-    
-    $query = "select * from categories where id = :id limit 1";
-    $row = query_row($query, ['id'=>$id]);
+    $slug = str_to_url($category);
+    $slug .= rand(1000, 9999);
 
-    if(!empty($_POST))
-    {
+    return [
+        'category' => $category,
+        'slug' => $slug,
+        'disabled' => $disabled,
+        'id' => $id
+    ];
+}
 
-      if($row)
-      {
-
-        //validate
-        $errors = [];
-
-        if(empty($_POST['category']))
-        {
-          $errors['category'] = "A category is required";
-        }else
-        if(!preg_match("/^[a-zA-Z0-9 \-\_\&]+$/", $_POST['category']))
-        {
-          $errors['category'] = "Category can only have letters";
-        }
- 
-        if(empty($errors))
-        {
-          //save to database
-          $data = [];
-          $data['category'] = $_POST['category'];
-          $data['disabled'] = $_POST['disabled'];
-          $data['id'] = $id;
-
-          $query = "update categories set category = :category, disabled = :disabled where id = :id limit 1";
-
-          query($query, $data);
-          redirect('admin/categories');
-
-        }
-      }
-    }
-}else
-if($action == 'delete')
+function processCategoryRequest($action, $id = null, $data = [])
 {
-    
-    $query = "select * from categories where id = :id limit 1";
-    $row = query_row($query, ['id'=>$id]);
+    global $errors;
 
-    if($_SERVER['REQUEST_METHOD'] == "POST")
-    {
-
-      if($row)
-      {
-
-        //validate
-        $errors = [];
-
-        if(empty($errors))
-        {
-          //delete from database
-          $data = [];
-          $data['id']       = $id;
-
-          $query = "delete from categories where id = :id limit 1";
-          query($query, $data);
-
-          redirect('admin/categories');
-
-        }
-      }
+    switch ($action) {
+        case 'add':
+            if (empty($errors) && isValidCategory($data['category'])) {
+                saveCategory($data);
+                redirect('admin/categories');
+            }
+            break;
+        case 'edit':
+            if (!empty($row)) {
+                if (empty($errors) && isValidCategory($data['category'])) {
+                    updateCategory($data);
+                    redirect('admin/categories');
+                }
+            }
+            break;
+        case 'delete':
+            if (!empty($row)) {
+                if (empty($errors)) {
+                    deleteCategory($id);
+                    redirect('admin/categories');
+                }
+            }
+            break;
     }
-  }
+}
+
+// Add, Edit, and Delete functions
+function saveCategory($data)
+{
+    global $query;
+    $query("insert into categories (category, slug, disabled) values (:category, :slug, :disabled)", $data);
+}
+
+function updateCategory($data)
+{
+    global $query;
+    $query("update categories set category = :category, disabled = :disabled where id = :id limit 1", $data);
+}
+
+function deleteCategory($id)
+{
+    global $query;
+    $query("delete from categories where id = :id limit 1", ['id' => $id]);
+}
+
+// Main logic
+$errors = [];
+$action = isset($_GET['action']) ? $_GET['action'] : '';
+
+if ($action == 'add' || $action == 'edit') {
+    $id = isset($_GET['id']) ? (int)$_GET['id'] : null;
+
+    if (!empty($_POST)) {
+        $data = [
+            'category' => $_POST['category'],
+            'disabled' => isset($_POST['disabled']) ? 1 : 0
+        ];
+
+        processCategoryRequest($action, $id, $data);
+    } else {
+        if ($action == 'edit') {
+            $query = "select * from categories where id = :id limit 1";
+            $row = query_row($query, ['id' => $id]);
+
+            if ($row) {
+                $data = [
+                    'category' => $row['category'],
+                    'disabled' => $row['disabled']
+                ];
+            }
+        }
+    }
+} else if ($action == 'delete') {
+    $id = isset($_GET['id']) ? (int)$_GET['id'] : null;
+
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+        processCategoryRequest($action, $id);
+    } else {
+        $query = "select * from categories where id = :id limit 1";
+        $row = query_row($query, ['id' => $id]);
+    }
+}
+
+// Display form
+if ($action == 'add' || ($action == 'edit' && !empty($row))) {
+    include 'category_form.php';
+} else if ($action == 'delete' && !empty($row)) {
+    include 'category_delete_form.php';
+} else {
+    include 'categories.php';
+}
