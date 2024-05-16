@@ -1,8 +1,16 @@
-<?php 
+<?php
 
-	//remove session user login and redirect to home page
-	if(!empty($_SESSION['USER']))
-		unset($_SESSION['USER']);
+// remove session user login
+if (isset($_SESSION['USER'])) {
+    unset($_SESSION['USER']);
+    session_destroy();
+}
 
-	redirect("home");
-?>
+// redirect to home page
+if (!headers_sent()) {
+    header('Location: /home');
+    exit;
+} else {
+    echo '<script>window.location.href = "/home";</script>';
+    exit;
+}
