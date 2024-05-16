@@ -1,3 +1,8 @@
-@media (min-width: 992px) {
-  .rounded-lg-3 { border-radius: .3rem; }
+<styler lang="scss">
+.rounded-lg-3 {
+  @include media-breakpoint-only(lg) {
+    border-radius: 0.3rem;
+  }
 }
+</style>
+
