@@ -1,13 +1,12 @@
 /* globals Chart:false, feather:false */
 
-(() => {
+(function() {
   'use strict'
 
   feather.replace({ 'aria-hidden': 'true' })
 
   // Graphs
   const ctx = document.getElementById('myChart')
-  // eslint-disable-next-line no-unused-vars
   const myChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -21,6 +20,8 @@
         'السبت'
       ],
       datasets: [{
+        type: 'line',
+        label: 'Number of Visits',
         data: [
           15339,
           21345,
@@ -47,6 +48,17 @@
       },
       legend: {
         display: false
+      },
+      title: {
+        display: true,
+        text: 'Weekly Visits'
+      },
+      tooltips: {
+        callbacks: {
+          label: function(tooltipItem, data) {
+            return tooltipItem.yLabel.toString() + ' visits';
+          }
+        }
       }
     }
   })
