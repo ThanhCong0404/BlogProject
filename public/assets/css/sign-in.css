@@ -1,6 +1,8 @@
+/* General styles */
 html,
 body {
   height: 100%;
+  margin: 0; /* Add this to remove the default margin */
 }
 
 body {
@@ -9,13 +11,17 @@ body {
   padding-top: 40px;
   padding-bottom: 40px;
   
-  background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(128,0,166,1) 28%, rgba(221,155,63,1) 100%);
-  /* background-color: #f5f5f5; */
+  /* Use CSS variables for easier color customization */
+  background: linear-gradient(180deg, var(--color-1) 0%, var(--color-2) 28%, var(--color-3) 100%);
 }
 
+/* Form styles */
 .form-signin {
   max-width: 330px;
   padding: 15px;
+  margin: 0 auto; /* Center the form horizontally */
+  background-color: white; /* Add a background color to the form */
+  box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Add a subtle shadow */
 }
 
 .form-signin .form-floating:focus-within {
@@ -26,10 +32,29 @@ body {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
+  border-color: var(--color-3); /* Use the same color as the background gradient */
 }
 
 .form-signin input[type="password"] {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+  border-color: var(--color-3); /* Use the same color as the background gradient */
+}
+
+/* Add a custom focus style */
+.form-signin input:focus {
+  box-shadow: 0 0 2px var(--color-3);
+}
+
+/* Add a custom hover style */
+.form-signin input:hover {
+  border-color: var(--color-2); /* Use the second color from the background gradient */
+}
+
+
+body {
+  --color-1: rgba(0,0,0,1);
+  --color-2: rgba(128,0,166,1);
+  --color-3: rgba(221,155,63,1);
 }
