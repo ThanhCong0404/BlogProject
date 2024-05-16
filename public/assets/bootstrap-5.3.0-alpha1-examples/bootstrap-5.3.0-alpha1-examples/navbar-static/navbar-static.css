@@ -1,4 +1,20 @@
-/* Show it's not fixed to the top */
+<body>
+  <div class="content">
+    <h1>It's not fixed to the top!</h1>
+  </div>
+</body>
+
+
 body {
-  min-height: 75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.content {
+  text-align: center;
 }
