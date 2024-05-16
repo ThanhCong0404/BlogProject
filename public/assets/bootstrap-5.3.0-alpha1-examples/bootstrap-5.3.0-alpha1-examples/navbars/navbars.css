@@ -1,7 +1,28 @@
-body {
-  padding-bottom: 20px;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Improved Code Example</title>
+  <style>
+    /* Use a CSS class instead of a tag selector for better specificity and reusability */
+    .container {
+      padding-bottom: 20px;
+    }
 
-.navbar {
-  margin-bottom: 20px;
-}
+    /* Added a class for the navbar container for better organization */
+    .navbar-container {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar-container">
+    <!-- Navbar content goes here -->
+  </div>
+
+  <div class="container">
+    <!-- Main content goes here -->
+  </div>
+</body>
+</html>
