@@ -1,8 +1,17 @@
-/* global bootstrap: false */
 (() => {
   'use strict'
-  const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-  tooltipTriggerList.forEach(tooltipTriggerEl => {
-    new bootstrap.Tooltip(tooltipTriggerEl)
-  })
-})()
+
+  // Check if Bootstrap tooltip is available
+  if (typeof bootstrap === 'undefined' || !bootstrap.Tooltip) {
+    console.warn('Bootstrap Tooltip not found, tooltips will not be initialized');
+    return;
+  }
+
+  // Get all elements with data-bs-toggle="tooltip"
+  const tooltipElements = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+
+  // Initialize Bootstrap Tooltip for each element
+  tooltipElements.forEach(tooltipElement => {
+    new bootstrap.Tooltip(tooltipElement);
+  });
+})();
